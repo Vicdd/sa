@@ -1,6 +1,6 @@
-# sa
+# sa (Shinier Assignment)
 
-A new Flutter project.
+Flutter project with a simple form.
 
 ## Getting Started
 
