@@ -5,7 +5,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Form Validation Demo';
+    final appTitle = 'Form Demo';
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -20,6 +20,14 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+class FormData {
+  String personName;
+  String jobName; 
+  int personAge;
+   
+  FormData(this.personName, this.jobName, this.personAge);
 }
 
 class MyHomePage extends StatefulWidget {
@@ -39,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
     'Profissional de RH'
   ];
 
-  String _date = "01 - 01 - 01";
+  DateTime _date = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -49,15 +57,34 @@ class _MyHomePageState extends State<MyHomePage> {
       lastDate: DateTime.now(),
     );
     if (picked != null && picked != _date)
-      setState(() {_date = "${picked.month} - ${picked.day} - ${picked.year}";});
+      setState(() {_date = picked;});
   }
 
   final _nameController = TextEditingController();
 
+  int calculateAge(DateTime _date) {
+    var age;
+    DateTime now = DateTime.now();
+
+    age = now.year - _date.year;
+    if (now.month < _date.month) {
+      age--;
+    } else if (now.month == _date.month) {
+      if (now.day < _date.day) {
+        age--;
+      }
+    }
+
+    return age;
+  }
+
   void _sendDataToSecondScreen(BuildContext context) {
+    var age = calculateAge(_date);
+    final data = FormData(_nameController.text, selectedType, age);
+    
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => SecondScreen(list: [_nameController.text, selectedType, _date.toString()]))
+        MaterialPageRoute(builder: (context) => SecondScreen(data : data))
     );
   }
 
@@ -94,24 +121,26 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 },
                 value: selectedType,
-                isExpanded: false,
+                isExpanded: true,
                 hint: Text(
                   'Choose Job',
                 ),
               ),
               SizedBox(height: 20.0),
-              Text('Date selected: $_date'),
+              Text('Date selected: ${_date.day}/${_date.month}/${_date.year}'),
               RaisedButton(
                 child: Text('Date of Birth'),
                 onPressed: (){
                   _selectDate(context);
                 }
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 40.0),
               RaisedButton(
                 child: Text('Submit'),
                 onPressed: (){
-                  _sendDataToSecondScreen(context);
+                  if (_formKeyValue.currentState.validate()) {
+                    _sendDataToSecondScreen(context);
+                  }
                 }
               ),
             ],
@@ -122,9 +151,9 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class SecondScreen extends StatelessWidget {
-  final List list;
+  final FormData data;
 
-  SecondScreen({Key key, @required this.list}) : super(key: key);
+  SecondScreen({Key key, @required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -135,11 +164,11 @@ class SecondScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
           children: <Widget>[
             SizedBox(height: 20.0),
-            Text(list[0]),
+            Text(data.personName),
             SizedBox(height: 20.0),
-            Text(list[1]),
+            Text(data.jobName),
             SizedBox(height: 20.0),
-            Text(list[2])
+            Text(data.personAge.toString() + ' anos')
           ]
         )
       ),
