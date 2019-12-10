@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,10 +26,10 @@ class MyApp extends StatelessWidget {
 
 class FormData {
   String personName;
-  String jobName; 
+  String personJob; 
   int personAge;
    
-  FormData(this.personName, this.jobName, this.personAge);
+  FormData(this.personName, this.personJob, this.personAge);
 }
 
 class MyHomePage extends StatefulWidget {
@@ -38,49 +40,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var selectedType;
-  final GlobalKey<FormState> _formKeyValue = GlobalKey<FormState>();
-  List<String> jobName = <String>[
-    'Desenvolvedor',
-    'Adminstrador',
-    'Designer',
-    'Profissional de RH'
-  ];
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
-  DateTime _date = DateTime.now();
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(1990),
-      firstDate: DateTime(1940),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null && picked != _date)
-      setState(() {_date = picked;});
-  }
-
-  final _nameController = TextEditingController();
-
-  int calculateAge(DateTime _date) {
+  int calculateAge(DateTime date) {
     var age;
     DateTime now = DateTime.now();
-
-    age = now.year - _date.year;
-    if (now.month < _date.month) {
+    print(date);
+    age = now.year - date.year;
+    if (now.month < date.month)
       age--;
-    } else if (now.month == _date.month) {
-      if (now.day < _date.day) {
+    if (now.month == date.month)
+      if (now.day < date.day)
         age--;
-      }
-    }
 
     return age;
   }
 
   void _sendDataToSecondScreen(BuildContext context) {
-    var age = calculateAge(_date);
-    final data = FormData(_nameController.text, selectedType, age);
+    Map formValues = _fbKey.currentState.value;
+    var age = calculateAge(formValues['date']);
+    final data = FormData(formValues['name'], formValues['job'], age);
     
     Navigator.push(
         context,
@@ -91,61 +70,55 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Form(
-          key: _formKeyValue,
-          autovalidate: true,
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            children: <Widget>[
-              SizedBox(height: 20.0),
-              TextFormField(
-                decoration: const InputDecoration(
-                  hintText: 'Enter your Full Name',
-                  labelText: 'Full Name',
-                ),
-                controller: _nameController
-              ),
-              SizedBox(height: 20.0),
-              DropdownButton(
-                items: jobName
-                    .map((value) => DropdownMenuItem(
-                          child: Text(
-                            value,
-                          ),
-                          value: value,
-                        ))
-                    .toList(),
-                onChanged: (selectedAccountType) {
-                  setState(() {
-                    selectedType = selectedAccountType;
-                  });
-                },
-                value: selectedType,
-                isExpanded: true,
-                hint: Text(
-                  'Choose Job',
-                ),
-              ),
-              SizedBox(height: 20.0),
-              Text('Date selected: ${_date.day}/${_date.month}/${_date.year}'),
-              RaisedButton(
-                child: Text('Date of Birth'),
-                onPressed: (){
-                  _selectDate(context);
+      body: FormBuilder(
+        key: _fbKey,
+        autovalidate: true,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          children: <Widget>[
+            SizedBox(height: 20.0),
+            FormBuilderTextField(
+              attribute: "name",
+              decoration: InputDecoration(labelText: "Name"),
+              validators: [FormBuilderValidators.required()],
+            ),
+            SizedBox(height: 20.0),
+
+            FormBuilderDropdown(
+              attribute: "job",
+              decoration: InputDecoration(labelText: "Job"),
+              // initialValue: 'Male',
+              hint: Text('Select Job'),
+              validators: [FormBuilderValidators.required()],
+              items: ['Desenvolvedor', 'Adminstrador','Designer','Profissional de RH']
+                .map((job) => DropdownMenuItem(
+                  value: job,
+                  child: Text("$job")
+              )).toList(),
+            ),
+            SizedBox(height: 20.0),
+
+            FormBuilderDateTimePicker(
+              attribute: "date",
+              inputType: InputType.date,
+              format: DateFormat("dd-MM-yyyy"),
+              validators: [FormBuilderValidators.required()],
+              decoration:
+                InputDecoration(labelText: "Date of birth"),
+            ),
+            SizedBox(height: 40.0),
+
+            MaterialButton(
+              child: Text("Submit"),
+              onPressed: () {
+                if (_fbKey.currentState.saveAndValidate()) {
+                  _sendDataToSecondScreen(context);
                 }
-              ),
-              SizedBox(height: 40.0),
-              RaisedButton(
-                child: Text('Submit'),
-                onPressed: (){
-                  if (_formKeyValue.currentState.validate()) {
-                    _sendDataToSecondScreen(context);
-                  }
-                }
-              ),
-            ],
-          ),
+              },
+            ),
+          ],
         ),
+      ),
     );
   }
 }
@@ -166,9 +139,9 @@ class SecondScreen extends StatelessWidget {
             SizedBox(height: 20.0),
             Text(data.personName),
             SizedBox(height: 20.0),
-            Text(data.jobName),
+            Text(data.personJob),
             SizedBox(height: 20.0),
-            Text(data.personAge.toString() + ' anos')
+            Text(data.personAge.toString()),
           ]
         )
       ),
