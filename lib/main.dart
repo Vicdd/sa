@@ -9,9 +9,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       home: Scaffold(
         body: MyHomePage(),
       ),
@@ -38,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
   int calculateAge(DateTime date) {
-    var age;
+    int age;
     DateTime now = DateTime.now();
 
     age = now.year - date.year;
@@ -65,55 +62,80 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Image.asset("assets/images/img3.png"),
-            FormBuilder(
-              key: _fbKey,
-              autovalidate: false,
-              initialValue: {
-                'name': "",
-                'job': 'Select Job',
-                'date': DateTime.now(),
-              },
-              child: Column(
-                children: <Widget>[
-                  FormBuilderTextField(
-                    attribute: "name",
-                    decoration: InputDecoration(labelText: "Name"),
-                    validators: [FormBuilderValidators.required()],
-                  ),
-                  FormBuilderDropdown(
-                    attribute: "job",
-                    hint: Text('Select Job'),
-                    validators: [FormBuilderValidators.required()],
-                    items: [
-                      'Select Job',
-                      'Desenvolvedor',
-                      'Adminstrador',
-                      'Designer',
-                      'Profissional de RH'
-                    ]
-                        .map((job) =>
-                            DropdownMenuItem(value: job, child: Text("$job")))
-                        .toList(),
-                  ),
-                  FormBuilderDateTimePicker(
-                    attribute: "date",
-                    inputType: InputType.date,
-                    format: DateFormat("dd-MM-yyyy"),
-                    validators: [FormBuilderValidators.required()],
-                    decoration: InputDecoration(labelText: "Date of birth"),
-                  ),
-                  MaterialButton(
-                    child: Text("Submit"),
-                    onPressed: () {
-                      if (_fbKey.currentState.saveAndValidate()) {
-                        _sendDataToSecondScreen(context);
-                      }
-                    },
-                  ),
-                ],
+            Image.asset("assets/images/img1.png"),
+            Container (
+              padding: EdgeInsets.only(top: 10.0, left: 30.0, right: 30.0), 
+              child: FormBuilder(
+                key: _fbKey,
+                autovalidate: false,
+                child: Column(
+                  children: <Widget>[
+                    FormBuilderTextField(
+                      attribute: "name",
+                      maxLines: 1,
+                      decoration: InputDecoration(labelText: "Full Name"),
+                      validators: [FormBuilderValidators.required()],
+                    ),
+                    SizedBox(height: 30.0),
+
+                    FormBuilderDropdown(
+                      attribute: "job",
+                      hint: Text('Select Job'),
+                      decoration: InputDecoration(filled: true, border: InputBorder.none),
+                      validators: [FormBuilderValidators.required()],
+                      iconSize: 0,
+                      items: [
+                        'Desenvolvedor',
+                        'Adminstrador',
+                        'Designer',
+                        'Profissional de RH'
+                      ]
+                          .map((job) =>
+                              DropdownMenuItem(value: job, child: Text(job)))
+                          .toList(),
+                    ),
+                    SizedBox(height: 15.0),
+
+                    FormBuilderDateTimePicker(
+                      attribute: "date",
+                      inputType: InputType.date,
+                      format: DateFormat("dd-MM-yyyy"),
+                      validators: [FormBuilderValidators.required()],
+                      decoration: InputDecoration(labelText: "Date of birth"),
+                    ),
+                    SizedBox(height: 20.0),
+
+                    MaterialButton(
+                      onPressed: () {
+                        if (_fbKey.currentState.saveAndValidate()) {
+                          _sendDataToSecondScreen(context);
+                        }
+                      },
+                      splashColor: Colors.transparent,  
+                      highlightColor: Colors.transparent,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: <Color>[
+                              Color(0xFFA074E7),
+                              Color(0xFFE6ABC1),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.arrow_right,
+                          color: Colors.white,
+                          size: 30.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),
