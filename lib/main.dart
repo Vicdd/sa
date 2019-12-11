@@ -7,7 +7,6 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Form Demo';
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -15,9 +14,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        appBar: AppBar(
-          title: Text(appTitle),
-        ),
         body: MyHomePage(),
       ),
     );
@@ -45,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int calculateAge(DateTime date) {
     var age;
     DateTime now = DateTime.now();
-    print(date);
+    
     age = now.year - date.year;
     if (now.month < date.month)
       age--;
@@ -70,55 +66,63 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FormBuilder(
-        key: _fbKey,
-        autovalidate: true,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          children: <Widget>[
-            SizedBox(height: 20.0),
-            FormBuilderTextField(
-              attribute: "name",
-              decoration: InputDecoration(labelText: "Name"),
-              validators: [FormBuilderValidators.required()],
-            ),
-            SizedBox(height: 20.0),
+      body: SingleChildScrollView(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Image.asset("assets/images/img1.png"),
+          FormBuilder(
+            key: _fbKey,
+            autovalidate: false,
+            initialValue: {
+              'name': "",
+              'job': 'Select',
+              'date': DateTime.now(),
+            },
+            child: Column(
+              children: <Widget>[
+                FormBuilderTextField(
+                  attribute: "name",
+                  decoration: InputDecoration(labelText: "Name"),
+                  validators: [FormBuilderValidators.required()],
+                ),
 
-            FormBuilderDropdown(
-              attribute: "job",
-              decoration: InputDecoration(labelText: "Job"),
-              // initialValue: 'Male',
-              hint: Text('Select Job'),
-              validators: [FormBuilderValidators.required()],
-              items: ['Desenvolvedor', 'Adminstrador','Designer','Profissional de RH']
-                .map((job) => DropdownMenuItem(
-                  value: job,
-                  child: Text("$job")
-              )).toList(),
-            ),
-            SizedBox(height: 20.0),
+                FormBuilderDropdown(
+                  attribute: "job",
+                  decoration: InputDecoration(labelText: "Job"),
+                  hint: Text('Select Job'),
+                  validators: [FormBuilderValidators.required()],
+                  items: ['Select Job', 'Desenvolvedor', 'Adminstrador','Designer','Profissional de RH']
+                    .map((job) => DropdownMenuItem(
+                      value: job,
+                      child: Text("$job")
+                  )).toList(),
+                ),
 
-            FormBuilderDateTimePicker(
-              attribute: "date",
-              inputType: InputType.date,
-              format: DateFormat("dd-MM-yyyy"),
-              validators: [FormBuilderValidators.required()],
-              decoration:
-                InputDecoration(labelText: "Date of birth"),
-            ),
-            SizedBox(height: 40.0),
+                FormBuilderDateTimePicker(
+                  attribute: "date",
+                  inputType: InputType.date,
+                  format: DateFormat("dd-MM-yyyy"),
+                  validators: [FormBuilderValidators.required()],
+                  decoration:
+                    InputDecoration(labelText: "Date of birth"),
+                ),
 
-            MaterialButton(
-              child: Text("Submit"),
-              onPressed: () {
-                if (_fbKey.currentState.saveAndValidate()) {
-                  _sendDataToSecondScreen(context);
-                }
-              },
+                MaterialButton(
+                  child: Text("Submit"),
+                  onPressed: () {
+                    if (_fbKey.currentState.saveAndValidate()) {
+                      _sendDataToSecondScreen(context);
+                    }
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
+      )
     );
   }
 }
