@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() => runApp(MyApp());
 
@@ -51,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final data = FormData(formValues['name'], formValues['job'], age);
 
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => SecondScreen(data: data)));
+        CupertinoPageRoute(builder: (context) => SecondScreen(data: data)));
   }
 
   @override
@@ -266,7 +267,7 @@ class SecondScreen extends StatelessWidget {
                       color: Color(0xFFD4E1F3),
                       onPressed: () {
                         Navigator.pop(context,
-                            MaterialPageRoute(builder: (context) => MyHomePage()));
+                            CupertinoPageRoute(builder: (context) => MyHomePage()));
                       },
                     ),
                     SizedBox(width: 30.0),
