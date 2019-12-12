@@ -35,12 +35,12 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
   int calculateAge(DateTime date) {
-    int age;
     DateTime now = DateTime.now();
-
-    age = now.year - date.year;
+    int age = now.year - date.year;
+    
     if (now.month < date.month) age--;
-    if (now.month == date.month) if (now.day < date.day) age--;
+    if (now.month == date.month) 
+      if (now.day < date.day) age--;
 
     return age;
   }
@@ -53,8 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => SecondScreen(data: data)));
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -105,13 +103,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         'Adminstrador',
                         'Designer',
                         'Profissional de RH'
-                      ]
-                          .map((job) =>
-                              DropdownMenuItem(value: job, child: Text(job)))
-                          .toList(),
+                      ] .map((job) =>
+                          DropdownMenuItem(value: job, child: Text(job))).toList(),
                     ),
                     SizedBox(height: 15.0),
-
                     FormBuilderDateTimePicker(
                       attribute: "date",
                       inputType: InputType.date,
@@ -124,16 +119,28 @@ class _MyHomePageState extends State<MyHomePage> {
                         labelStyle: TextStyle(fontSize: 18)
                       ),
                     ),
-                    SizedBox(height: 40.0),
+                    SizedBox(height: 42.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Image.asset('assets/images/arrowL.png', width:10, height: 20, fit: BoxFit.contain),
-                        SizedBox(width: 40.0),
-                        Image.asset('assets/images/circle2.png', width:10, height: 10, fit: BoxFit.contain),
-                        SizedBox(width: 10.0),
-                        Image.asset('assets/images/circle1.png', width:10, height: 10, fit: BoxFit.contain),
+                        Icon(
+                          Icons.arrow_left,
+                          size: 32,
+                          color: Color(0xFF0D2945),
+                        ),
+                        SizedBox(width: 30.0),
+                        Icon(
+                          Icons.fiber_manual_record,
+                          size: 12,
+                          color: Color(0xFFA6003E),
+                        ),
+                        SizedBox(width: 20.0),
+                        Image.asset(
+                          'assets/images/circle1.png',
+                          width:10, height: 10,
+                          fit: BoxFit.contain
+                        ),
                         MaterialButton(
                           onPressed: () {
                             if (_fbKey.currentState.saveAndValidate()) {
@@ -155,12 +162,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Icon(Icons.arrow_right, size: 20, color: Colors.white)
                           ),
                         ),
-                      ]
-                    )
+                      ],
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -219,26 +226,46 @@ class SecondScreen extends StatelessWidget {
                     fontSize: 32,
                   ),
                 ),
-                SizedBox(height: 62.0),
+                SizedBox(height: 60.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Icon(Icons.arrow_left, size: 40, color: Color(0xFFD4E1F3)),
-                    SizedBox(width: 40.0),
-                    Image.asset('assets/images/circle4.png', width:10, height: 10, fit: BoxFit.contain),
-                    SizedBox(width: 10.0),
-                    Image.asset('assets/images/circle3.png', width:10, height: 10, fit: BoxFit.contain),
+                    IconButton(
+                      icon: Icon(Icons.arrow_left),
+                      iconSize: 32,
+                      color: Color(0xFFD4E1F3),
+                      onPressed: () {
+                        Navigator.pop(context,
+                            MaterialPageRoute(builder: (context) => MyHomePage()));
+                      },
+                    ),
+                    SizedBox(width: 30.0),
+                    Icon(
+                      Icons.fiber_manual_record,
+                      size: 12,
+                      color: Color(0xFF0D2945),
+                    ),
+                    SizedBox(width: 20.0),
+                    Icon(
+                      Icons.fiber_manual_record,
+                      size: 12,
+                      color: Color(0xFFD4E1F3),
+                    ),
                     SizedBox(width: 40.0),
                     Container( 
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Color(0xFFD4E1F3)
                       ),
-                      child: Icon(Icons.arrow_right, size: 20, color: Color(0xFF0D2945))
+                      child: Icon(
+                        Icons.arrow_right,
+                        size: 20,
+                        color: Color(0xFF0D2945)
+                      ),
                     ),
-                  ]
-                )
+                  ],
+                ),
               ],
             ),
           ),
