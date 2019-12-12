@@ -54,6 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
         MaterialPageRoute(builder: (context) => SecondScreen(data: data)));
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +64,15 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Image.asset("assets/images/img1.png"),
+            Container(
+              height: MediaQuery.of(context).size.height/2,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/img1.png'),
+                  fit: BoxFit.fill
+                ),
+              ),
+            ),
             Container (
               padding: EdgeInsets.only(top: 10.0, left: 30.0, right: 30.0), 
               child: FormBuilder(
@@ -73,15 +83,21 @@ class _MyHomePageState extends State<MyHomePage> {
                     FormBuilderTextField(
                       attribute: "name",
                       maxLines: 1,
-                      decoration: InputDecoration(labelText: "Full Name"),
+                      decoration: InputDecoration(
+                        labelText: "Full Name",
+                        labelStyle: TextStyle(fontSize: 18),
+                        border: UnderlineInputBorder() 
+                      ),
                       validators: [FormBuilderValidators.required()],
                     ),
                     SizedBox(height: 30.0),
-
                     FormBuilderDropdown(
                       attribute: "job",
                       hint: Text('Select Job'),
-                      decoration: InputDecoration(filled: true, border: InputBorder.none),
+                      decoration: InputDecoration(
+                        filled: true, 
+                        border: InputBorder.none
+                      ),
                       validators: [FormBuilderValidators.required()],
                       iconSize: 0,
                       items: [
@@ -100,38 +116,47 @@ class _MyHomePageState extends State<MyHomePage> {
                       attribute: "date",
                       inputType: InputType.date,
                       format: DateFormat("dd-MM-yyyy"),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now().add(Duration(hours: 1)),
                       validators: [FormBuilderValidators.required()],
-                      decoration: InputDecoration(labelText: "Date of birth"),
-                    ),
-                    SizedBox(height: 20.0),
-
-                    MaterialButton(
-                      onPressed: () {
-                        if (_fbKey.currentState.saveAndValidate()) {
-                          _sendDataToSecondScreen(context);
-                        }
-                      },
-                      splashColor: Colors.transparent,  
-                      highlightColor: Colors.transparent,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: <Color>[
-                              Color(0xFFA074E7),
-                              Color(0xFFE6ABC1),
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.arrow_right,
-                          color: Colors.white,
-                          size: 30.0,
-                        ),
+                      decoration: InputDecoration(
+                        labelText: "Date of birth",
+                        labelStyle: TextStyle(fontSize: 18)
                       ),
                     ),
+                    SizedBox(height: 40.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset('assets/images/arrowL.png', width:10, height: 20, fit: BoxFit.contain),
+                        SizedBox(width: 40.0),
+                        Image.asset('assets/images/circle2.png', width:10, height: 10, fit: BoxFit.contain),
+                        SizedBox(width: 10.0),
+                        Image.asset('assets/images/circle1.png', width:10, height: 10, fit: BoxFit.contain),
+                        MaterialButton(
+                          onPressed: () {
+                            if (_fbKey.currentState.saveAndValidate()) {
+                              _sendDataToSecondScreen(context);
+                            }
+                          },
+                          child: Container( 
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: <Color>[
+                                  Color(0xFFA074E7),
+                                  Color(0xFFE6ABC1),
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                            ),
+                            child: Icon(Icons.arrow_right, size: 20, color: Colors.white)
+                          ),
+                        ),
+                      ]
+                    )
                   ],
                 ),
               ),
@@ -152,10 +177,20 @@ class SecondScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Image.asset("assets/images/img2.png"),
           Container(
-            padding: EdgeInsets.all(30),
+            height: MediaQuery.of(context).size.height/2,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/img2.png'),
+                fit: BoxFit.fill
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 30.0, left: 30.0, right: 30.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +200,7 @@ class SecondScreen extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontFamily: 'OpenSans',
-                    fontSize: 36,
+                    fontSize: 32,
                   ),
                 ),
                 SizedBox(height: 20.0),
@@ -173,7 +208,7 @@ class SecondScreen extends StatelessWidget {
                   data.personJob,
                   style: TextStyle(
                     fontFamily: 'OpenSans',
-                    fontSize: 36,
+                    fontSize: 32,
                   ),
                 ),
                 SizedBox(height: 20.0),
@@ -181,9 +216,29 @@ class SecondScreen extends StatelessWidget {
                   data.personAge.toString() + " anos",
                   style: TextStyle(
                     fontFamily: 'OpenSans',
-                    fontSize: 36,
+                    fontSize: 32,
                   ),
                 ),
+                SizedBox(height: 62.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.arrow_left, size: 40, color: Color(0xFFD4E1F3)),
+                    SizedBox(width: 40.0),
+                    Image.asset('assets/images/circle4.png', width:10, height: 10, fit: BoxFit.contain),
+                    SizedBox(width: 10.0),
+                    Image.asset('assets/images/circle3.png', width:10, height: 10, fit: BoxFit.contain),
+                    SizedBox(width: 40.0),
+                    Container( 
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFFD4E1F3)
+                      ),
+                      child: Icon(Icons.arrow_right, size: 20, color: Color(0xFF0D2945))
+                    ),
+                  ]
+                )
               ],
             ),
           ),
