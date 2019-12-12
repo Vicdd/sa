@@ -72,52 +72,81 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Container (
-              padding: EdgeInsets.only(top: 10.0, left: 30.0, right: 30.0), 
+              padding: EdgeInsets.only(top: 15.0, left: 30.0, right: 30.0), 
               child: FormBuilder(
                 key: _fbKey,
                 autovalidate: false,
                 child: Column(
                   children: <Widget>[
-                    FormBuilderTextField(
-                      attribute: "name",
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        labelText: "Full Name",
-                        labelStyle: TextStyle(fontSize: 18),
-                        border: UnderlineInputBorder() 
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Color(0xFFE8E8E8), width: 5.0))
                       ),
-                      validators: [FormBuilderValidators.required()],
+                      child: FormBuilderTextField(
+                        attribute: "name",
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          fontFamily: 'OpenSans',
+                          color: Color(0xFF757575)     
+                        ),
+                        decoration: InputDecoration(
+                          labelText: "Full Name",
+                          labelStyle: TextStyle(fontSize: 18),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(vertical: 5.0),
+                        ),
+                        maxLines: 1,
+                        validators: [FormBuilderValidators.required()],
+                      ),
                     ),
                     SizedBox(height: 30.0),
-                    FormBuilderDropdown(
-                      attribute: "job",
-                      hint: Text('Select Job'),
-                      decoration: InputDecoration(
-                        filled: true, 
-                        border: InputBorder.none
+                    Material(
+                      elevation: 10.0,
+                      shadowColor: Colors.grey,
+                      child: FormBuilderDropdown(
+                        attribute: "job",
+                        hint: Text('Select Job', style: TextStyle(color: Color(0xFF757575), fontSize: 22)),
+                        decoration: InputDecoration(
+                          filled: true, 
+                          border: InputBorder.none
+                        ),
+                        style: TextStyle(color: Color(0xFF757575), fontSize: 22),
+                        validators: [FormBuilderValidators.required()],
+                        iconSize: 0,
+                        items: [
+                          'Desenvolvedor',
+                          'Adminstrador',
+                          'Designer',
+                          'Profissional de RH'
+                        ] .map((job) =>
+                            DropdownMenuItem(value: job, child: Text(job))).toList(),
                       ),
-                      validators: [FormBuilderValidators.required()],
-                      iconSize: 0,
-                      items: [
-                        'Desenvolvedor',
-                        'Adminstrador',
-                        'Designer',
-                        'Profissional de RH'
-                      ] .map((job) =>
-                          DropdownMenuItem(value: job, child: Text(job))).toList(),
                     ),
-                    SizedBox(height: 15.0),
-                    FormBuilderDateTimePicker(
-                      attribute: "date",
-                      inputType: InputType.date,
-                      format: DateFormat("dd-MM-yyyy"),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now().add(Duration(hours: 1)),
-                      validators: [FormBuilderValidators.required()],
-                      decoration: InputDecoration(
-                        labelText: "Date of birth",
-                        labelStyle: TextStyle(fontSize: 18)
+                    SizedBox(height: 25.0),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Color(0xFFE8E8E8), width: 5.0))
                       ),
+                      child:
+                        FormBuilderDateTimePicker(
+                          attribute: "date",
+                          inputType: InputType.date,
+                          format: DateFormat("dd-MM-yyyy"),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now().add(Duration(hours: 1)),
+                          validators: [FormBuilderValidators.required()],
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            fontFamily: 'OpenSans',
+                            color: Color(0xFF757575)             
+                          ),
+                          decoration: InputDecoration(
+                            labelText: "Date of birth",
+                            labelStyle: TextStyle(fontSize: 18),
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(vertical: 5.0),
+                          ),
+                        ),
                     ),
                     SizedBox(height: 42.0),
                     Row(
@@ -197,7 +226,7 @@ class SecondScreen extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 30.0, left: 30.0, right: 30.0),
+            padding: EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,7 +255,7 @@ class SecondScreen extends StatelessWidget {
                     fontSize: 32,
                   ),
                 ),
-                SizedBox(height: 60.0),
+                SizedBox(height: 90.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
