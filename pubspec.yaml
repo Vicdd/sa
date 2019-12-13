@@ -45,7 +45,6 @@ flutter:
   assets:
   - assets/images/img1.png
   - assets/images/img2.png
-  - assets/images/circle1.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
